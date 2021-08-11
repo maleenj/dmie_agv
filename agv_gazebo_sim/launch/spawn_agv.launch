@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
-    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find m2wr_description)/urdf/m2wr.xacro'" />
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find agv_gazebo_sim)/urdf/m2wr.xacro'" />
     
     <arg name="x" default="0"/>
     <arg name="y" default="0"/>
@@ -17,7 +17,7 @@
   <!-- Combine joint values -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find m2wr_description)/rvizconfig2.rviz" />
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find agv_gazebo_sim)/rvizconfig2.rviz" />
 
           
 </launch>
