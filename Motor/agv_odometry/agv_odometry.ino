@@ -17,9 +17,9 @@ tf::TransformBroadcaster broadcaster;
 #define ENC_IN_RIGHT_B 10
 
 //
-const double wheel_radius = 0.0685;//in m
+const double wheel_radius = 0.048;//in m
 const double wheel_gap=0.37;
-int ticks = 2100;
+int ticks = 1050;
 
 // True = Forward; False = Reverse
 boolean Direction_left = true;
@@ -93,18 +93,21 @@ void loop() {
     total_left_distance = total_left_distance + left_dis_gap;
     total_right_distance = total_right_distance + right_dis_gap;
     
-    Serial.println("Distance: ");
-    Serial.println(total_left_distance,3);
-    Serial.println(total_right_distance,3);
+    //Serial.println("Distance: ");
+    //Serial.println(total_left_distance,3);
+    //Serial.println(total_right_distance,3);
     //Serial.println(timegap);
     Serial.println("v_l =");
-    Serial.println(v_l,3);
+    Serial.println(v_l,4);
     Serial.println("v_r =");
-    Serial.println(v_r,3);        
+    Serial.println(v_r,4);
+           
     
     //Serial.println(2*3.14*0.05*(right_wheel_tick_count/438));
     //Serial.println(2*3.14*0.05*(left_wheel_tick_count/438));
     Serial.println();
+    nh.spinOnce();
+    delay(1000);
   }
 }
 
@@ -112,6 +115,7 @@ void calc_pub_odom(double v_l,double v_r,double timegap){
 
   double vel_trans=(v_l+v_r)/2;
   double anguler_vel=(v_l-v_r)/wheel_gap;
+  
   
   double delta_yaw=anguler_vel*timegap/1000;
     
@@ -125,7 +129,10 @@ void calc_pub_odom(double v_l,double v_r,double timegap){
   
   positionX=positionX+delta_x;
   positionY=positionY+delta_y;
-
+  Serial.println(positionX,4);
+  Serial.println(positionY,4);
+  Serial.println("yaw=");
+  Serial.println(yaw,4);
   
   t.header.frame_id = "/odom";
   t.child_frame_id = "/base_link";
@@ -137,7 +144,6 @@ void calc_pub_odom(double v_l,double v_r,double timegap){
   t.header.stamp = nh.now();
     
   broadcaster.sendTransform(t);
-  nh.spinOnce();
    
 }
 
