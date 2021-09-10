@@ -1,14 +1,15 @@
 char t;
 
+
 int ENB = 5;
 int IND = 9;
 int INC = 6;
 
 int ENA = 7;
 int INA = 8;
-int INB = 11;
+int INB = 12;
 
-int Q = 100;
+int Q = (140);
 void setup() {
   
 pinMode(ENB,OUTPUT);   //left motors forward
@@ -26,6 +27,7 @@ void loop() {
 if(Serial.available()){
   t = Serial.read();
   Serial.println(t);
+  Serial.println(Q);
 }
  
 if(t == 'F'){            //move forward(all motors rotate in forward direction)
