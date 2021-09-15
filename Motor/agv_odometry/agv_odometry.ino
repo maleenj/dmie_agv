@@ -49,7 +49,7 @@ double yaw=0;
 
 
 //interval for measurements
-int interval = 1500;
+int interval = 100;
 long previousMillis = 0;
 long currentMillis = 0;
 long timegap = 0;
@@ -59,7 +59,7 @@ void setup() {
   nh.initNode();
   broadcaster.init(nh);
   // Open the serial port at 9600 bps
-  Serial.begin(9600); 
+  Serial.begin(115200); 
  
   // Set pin states of the encoder
   pinMode(ENC_IN_LEFT_A , INPUT_PULLUP);
@@ -92,22 +92,9 @@ void loop() {
     
     total_left_distance = total_left_distance + left_dis_gap;
     total_right_distance = total_right_distance + right_dis_gap;
-    
-    //Serial.println("Distance: ");
-    //Serial.println(total_left_distance,3);
-    //Serial.println(total_right_distance,3);
-    //Serial.println(timegap);
-    Serial.println("v_l =");
-    Serial.println(v_l,4);
-    Serial.println("v_r =");
-    Serial.println(v_r,4);
-           
-    
-    //Serial.println(2*3.14*0.05*(right_wheel_tick_count/438));
-    //Serial.println(2*3.14*0.05*(left_wheel_tick_count/438));
-    Serial.println();
+
     nh.spinOnce();
-    delay(1000);
+    //delay(1000);
   }
 }
 
@@ -115,7 +102,6 @@ void calc_pub_odom(double v_l,double v_r,double timegap){
 
   double vel_trans=(v_l+v_r)/2;
   double anguler_vel=(v_l-v_r)/wheel_gap;
-  
   
   double delta_yaw=anguler_vel*timegap/1000;
     
