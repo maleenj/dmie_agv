@@ -15,8 +15,8 @@ from numpy.linalg import inv
 from numpy.linalg import cond
 #import scipy.io #For matlab
 from decimal import Decimal
-from scipy.interpolate import interp1d
-from scipy.interpolate import InterpolatedUnivariateSpline
+#from scipy.interpolate import interp1d
+#from scipy.interpolate import InterpolatedUnivariateSpline
 
 from std_msgs.msg import String
 from nav_msgs.msg import Odometry
