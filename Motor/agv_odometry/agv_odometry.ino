@@ -19,7 +19,7 @@ tf::TransformBroadcaster broadcaster;
 //
 const double wheel_radius = 0.048;//in m
 const double wheel_gap=0.37;
-int ticks = 1050;
+int ticks = 2100;
 
 // True = Forward; False = Reverse
 boolean Direction_left = true;
