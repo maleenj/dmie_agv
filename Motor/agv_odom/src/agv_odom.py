@@ -52,7 +52,7 @@ ticks_per_rev = 2100;
 def callback(data):
     global current_encoder_left, current_encoder_right, previous_encoder_left, previous_encoder_right, odom_cnt, odom_message, current_time, previous_time
     global wheel_radius, wheel_gap,ticks_per_rev, positionx, positiony, orientz
-    #rospy.loginfo("Recieved %f", data.vector.x)
+    rospy.loginfo("Recieved %f", data.vector.x)
     odom_broadcaster = tf.TransformBroadcaster()
 
     previous_time=current_time
@@ -105,6 +105,7 @@ def callback(data):
 
     
 def encoder_listen():
+    rospy.loginfo("STARTED!!")
 
 
    rospy.Subscriber("encoder_ticks", Vector3Stamped, callback)
