@@ -105,7 +105,7 @@ def callback(data):
 
     
 def encoder_listen():
-    rospy.loginfo("STARTED!!")
+   rospy.loginfo("STARTED!!")
 
 
    rospy.Subscriber("encoder_ticks", Vector3Stamped, callback)
