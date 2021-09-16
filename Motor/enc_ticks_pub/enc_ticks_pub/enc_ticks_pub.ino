@@ -56,10 +56,10 @@ void loop() {
 void pub_ticks(int ltc,int rtc){
 
   Serial.println("LTC=");
-  Serial.println(ltc,4);
+  Serial.println(ltc);
 
   Serial.println("RTC=");
-  Serial.println(rtc,4);
+  Serial.println(rtc);
 
   P.header.stamp = nh.now();
   P.header.frame_id = "/encoder";
@@ -78,7 +78,7 @@ void right_wheel_tick() {
   // Read the value for the encoder for the right wheel
   int val = digitalRead(ENC_IN_RIGHT_B);
  
-  if(val == HIGH) { //Forward
+  if(val == LOW) { //Forward
          
     if (right_wheel_tick_count == encoder_maximum) {
       right_wheel_tick_count = encoder_minimum;
