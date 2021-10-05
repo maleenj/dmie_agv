@@ -1,17 +1,16 @@
 Panels:
   - Class: rviz/Displays
-    Help Height: 78
+    Help Height: 0
     Name: Displays
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /Status1
-        - /LaserScan1
-        - /Map1
-        - /PoseWithCovariance1
-        - /Camera1
+        - /Grid1
+        - /Odometry1/Shape1
+        - /TF1
+        - /TF1/Frames1
       Splitter Ratio: 0.5
-    Tree Height: 250
+    Tree Height: 328
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -53,7 +52,7 @@ Visualization Manager:
         Y: 0
         Z: 0
       Plane: XY
-      Plane Cell Count: 10
+      Plane Cell Count: 20
       Reference Frame: <Fixed Frame>
       Value: true
     - Alpha: 1
@@ -199,16 +198,85 @@ Visualization Manager:
         Grid: true
         LaserScan: true
         Map: true
+        Odometry: true
         PoseArray: true
         PoseWithCovariance: true
         RobotModel: true
+        TF: true
         Value: true
       Zoom Factor: 1
+    - Angle Tolerance: 0.10000000149011612
+      Class: rviz/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: true
+      Enabled: true
+      Keep: 1000
+      Name: Odometry
+      Position Tolerance: 0.10000000149011612
+      Queue Size: 10
+      Shape:
+        Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.10000000149011612
+        Color: 255; 25; 0
+        Head Length: 0.10000000149011612
+        Head Radius: 0.10000000149011612
+        Shaft Length: 0.25
+        Shaft Radius: 0.05000000074505806
+        Value: Arrow
+      Topic: /agv_odometry
+      Unreliable: false
+      Value: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: false
+        base_link:
+          Value: true
+        camera_link:
+          Value: false
+        link_left_wheel:
+          Value: false
+        link_right_wheel:
+          Value: false
+        odom:
+          Value: true
+        sensor_laser:
+          Value: false
+      Marker Alpha: 1
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        odom:
+          base_link:
+            camera_link:
+              {}
+            sensor_laser:
+              {}
+      Update Interval: 0
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: map
+    Fixed Frame: odom
     Frame Rate: 30
   Name: root
   Tools:
@@ -232,7 +300,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 14.507336616516113
+      Distance: 9.194734573364258
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -248,9 +316,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4903993606567383
+      Pitch: 1.3303987979888916
       Target Frame: <Fixed Frame>
-      Yaw: 4.476748943328857
+      Yaw: 3.321737766265869
     Saved: ~
 Window Geometry:
   Camera:
