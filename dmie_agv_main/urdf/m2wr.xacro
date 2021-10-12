@@ -1,9 +1,9 @@
 <?xml version="1.0" ?>
 <robot name="m2wr" xmlns:xacro="http://www.ros.org/wiki/xacro">
   
-  <xacro:include filename="$(find agv_gazebo_sim)/urdf/materials.xacro" />
-  <xacro:include filename="$(find agv_gazebo_sim)/urdf/m2wr.gazebo" />
-  <xacro:include filename="$(find agv_gazebo_sim)/urdf/macros.xacro" />
+  <xacro:include filename="$(find dmie_agv_main)/urdf/materials.xacro" />
+  <xacro:include filename="$(find dmie_agv_main)/urdf/m2wr.gazebo" />
+  <xacro:include filename="$(find dmie_agv_main)/urdf/macros.xacro" />
 
 
   <link name="base_link">
@@ -23,7 +23,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.01"/>
       <geometry>
-        <mesh filename="file://$(find agv_gazebo_sim)/models/v1/meshes/cart.dae"  scale="1 1 1"/>
+        <mesh filename="file://$(find dmie_agv_main)/models/v1/meshes/cart.dae"  scale="1 1 1"/>
       </geometry>
       <material name="blue"/>
     </visual>
