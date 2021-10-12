@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import roslib; roslib.load_manifest('agv_odom')
+import roslib; roslib.load_manifest('dmie_agv_odom')
 import rospy
 import copy
 import time
@@ -26,7 +26,7 @@ import tf as tf
 
 #from agv_odom import henc
 
-rospy.init_node('agv_odom', anonymous=True)
+rospy.init_node('dmie_agv_odom', anonymous=True)
 current_encoder_left=0
 current_encoder_right=0
 previous_encoder_left=0
