@@ -62,7 +62,7 @@ float demandz=0;
 double demand_speed_left;
 double demand_speed_right;
 int ENB = 5;
-int IND = 11;
+int IND = 9;
 int INC = 6;
 
 int ENA = 7;

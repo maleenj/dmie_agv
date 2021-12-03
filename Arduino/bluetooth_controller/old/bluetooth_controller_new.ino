@@ -32,7 +32,7 @@ PID leftPID(&left_input, &left_output, &left_setpoint, left_kp, left_ki, left_kd
 void cmd_vel_cb( const geometry_msgs::Twist& twist){
   demandlinear = twist.linear.x;
   demandangular = twist.angular.z;
-  Serial.println(demandlinear,4);
+  //Serial.println(demandx,4);
 }
 
 
@@ -43,8 +43,8 @@ void current_vel_cb( const geometry_msgs::Twist& twist){
   Serial.println(current_speed_left,4);
 }
 
-ros::Subscriber<geometry_msgs::Twist> sub_demand("/cmd_vel", &cmd_vel_cb );
-ros::Subscriber<geometry_msgs::Twist> sub_currentvel("/agv_currentvel", &current_vel_cb);
+ros::Subscriber<geometry_msgs::Twist> sub_demand("/cmd_vel", cmd_vel_cb );
+ros::Subscriber<geometry_msgs::Twist> sub_currentvel("/agv_currentvel", current_vel_cb );
 
 //Bluetooth Code Begins
 char t;
@@ -72,24 +72,21 @@ void setup() {
   leftPID.SetSampleTime(1);
   leftPID.SetOutputLimits(-140, 140);
     
-//  pinMode(ENB,OUTPUT);   
-//  pinMode(IND,OUTPUT);   
-//  pinMode(INC,OUTPUT);   
-//  pinMode(ENA,OUTPUT);   
-//  pinMode(INA,OUTPUT);  
-//  pinMode(INB,OUTPUT);
-//  
+  pinMode(ENB,OUTPUT);   
+  pinMode(IND,OUTPUT);   
+  pinMode(INC,OUTPUT);   
+  pinMode(ENA,OUTPUT);   
+  pinMode(INA,OUTPUT);  
+  pinMode(INB,OUTPUT);
+  
   
   //Bluetooth Code Ends
-  Serial.begin(9600);
+  Serial.begin(115200);
 
- 
+
 }
  
 void loop() {
-
-    nh.spinOnce();
-    delay(1);
 
     demand_speed_left = demandlinear - (demandangular*wheel_gap/2);
     demand_speed_right = demandlinear + (demandangular*wheel_gap/2);
@@ -103,14 +100,12 @@ void loop() {
     leftPID.Compute();
     rightPID.Compute();
 
-//  analogWrite(ENA,left_output*100);
-//  analogWrite(ENB,right_output*100);
-//  digitalWrite(IND,HIGH);
-//  digitalWrite(INA,HIGH);
-//  digitalWrite(INC,LOW);
-//  digitalWrite(INB,LOW);
-
-     
+  analogWrite(ENA,left_output*100);
+  analogWrite(ENB,right_output*100);
+  digitalWrite(IND,HIGH);
+  digitalWrite(INA,HIGH);
+  digitalWrite(INC,LOW);
+  digitalWrite(INB,LOW);
 
 
 // //Bluetooth Code Begins
@@ -169,5 +164,5 @@ else if(t == 'S'){      //STOP (all motors stop)
   digitalWrite(INB,LOW);
   //Serial.println(t);
 }
-//delay(Q);
+delay(Q);
 }

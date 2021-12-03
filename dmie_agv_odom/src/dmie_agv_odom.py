@@ -21,7 +21,7 @@ from decimal import Decimal
 from std_msgs.msg import String
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Vector3Stamped
-from geometry_msgs.msg import TwistWithCovarianceStamped
+from geometry_msgs.msg import Twist
 import tf as tf
 
 
@@ -47,7 +47,7 @@ increasex=0
 increasey=0
 
 odom_message=Odometry()
-vel_message=TwistWithCovarianceStamped()
+vel_message=Twist()
 
 odom_cnt=0
 
@@ -162,7 +162,7 @@ def callback(data):
     (tmpx,tmpy)=handle_dat_encoder(current_encoder_left,previous_encoder_left,current_encoder_right,previous_encoder_right)
 
     odom_pub = rospy.Publisher('agv_odometry', Odometry, queue_size=10)
-    currentvel_pub = rospy.Publisher('agv_currentvel', TwistWithCovarianceStamped, queue_size=10)
+    currentvel_pub = rospy.Publisher('agv_currentvel', Twist, queue_size=10)
 
     left_dis_gap = np.float64((tmpx-previous_tmpx)/ticks_per_rev)*2*np.pi*wheel_radius;
     right_dis_gap = np.float64((tmpy-previous_tmpy)/ticks_per_rev)*2*np.pi*wheel_radius;
@@ -213,13 +213,13 @@ def callback(data):
 
     odom_pub.publish(odom_message)
     
-    vel_message.header.stamp = current_time
-    vel_message.header.seq = odom_cnt
+    #vel_message.header.stamp = current_time
+    #vel_message.header.seq = odom_cnt
 
-    vel_message.header.frame_id = 'odom'
+    #vel_message.header.frame_id = 'odom'
    
-    vel_message.twist.twist.linear.x=velocity_left
-    vel_message.twist.twist.linear.y=velocity_right
+    vel_message.linear.x=velocity_left
+    vel_message.linear.y=velocity_right
     
     currentvel_pub.publish(vel_message)
 
@@ -230,6 +230,7 @@ def encoder_listen():
 
 
    rospy.Subscriber("encoder_ticks", Vector3Stamped, callback)
+   
    #encoder_pub()
 
    # spin() simply keeps python from exiting until this node is stopped

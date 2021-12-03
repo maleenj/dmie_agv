@@ -13,8 +13,8 @@ ros::Publisher tickpub("encoder_ticks", &P);
  
 // Other encoder output to Arduino to keep track of wheel direction
 // Tracks ther direction of rotation.
-#define ENC_IN_LEFT_B 4
-#define ENC_IN_RIGHT_B 10
+#define ENC_IN_LEFT_B 20
+#define ENC_IN_RIGHT_B 21
 
 // True = Forward; False = Reverse
 boolean Direction_left = true;
