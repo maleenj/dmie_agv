@@ -13,8 +13,8 @@ tf::TransformBroadcaster broadcaster;
  
 // Other encoder output to Arduino to keep track of wheel direction
 // Tracks ther direction of rotation.
-#define ENC_IN_LEFT_B 20
-#define ENC_IN_RIGHT_B 21
+#define ENC_IN_LEFT_B 4
+#define ENC_IN_RIGHT_B 10
 
 //
 const double wheel_radius = 0.048;//in m

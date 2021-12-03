@@ -21,6 +21,7 @@ from decimal import Decimal
 from std_msgs.msg import String
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Vector3Stamped
+from geometry_msgs.msg import TwistWithCovarianceStamped
 import tf as tf
 
 
@@ -46,6 +47,8 @@ increasex=0
 increasey=0
 
 odom_message=Odometry()
+vel_message=TwistWithCovarianceStamped()
+
 odom_cnt=0
 
 wheel_radius = 0.048; #in m
@@ -141,11 +144,13 @@ def handle_dat_encoder(encoder_x,encoder_x_prev, encoder_y, encoder_y_prev):
 def callback(data):
     global current_encoder_left, current_encoder_right, previous_encoder_left, previous_encoder_right, odom_cnt, odom_message, current_time, previous_time
     global wheel_radius, wheel_gap,ticks_per_rev, positionx, positiony, orientz,previous_tmpx,previous_tmpy
-    #rospy.loginfo("Recieved %f, %f ", data.vector.x,data.vector.y)
+    rospy.loginfo("Recieved %f, %f ", data.vector.x,data.vector.y)
     odom_broadcaster = tf.TransformBroadcaster()
 
     previous_time=current_time
     current_time=data.header.stamp
+    
+    time_gap=current_time.to_sec()-previous_time.to_sec()
 
     previous_encoder_left=current_encoder_left
     previous_encoder_right=current_encoder_right
@@ -157,6 +162,7 @@ def callback(data):
     (tmpx,tmpy)=handle_dat_encoder(current_encoder_left,previous_encoder_left,current_encoder_right,previous_encoder_right)
 
     odom_pub = rospy.Publisher('agv_odometry', Odometry, queue_size=10)
+    currentvel_pub = rospy.Publisher('agv_currentvel', TwistWithCovarianceStamped, queue_size=10)
 
     left_dis_gap = np.float64((tmpx-previous_tmpx)/ticks_per_rev)*2*np.pi*wheel_radius;
     right_dis_gap = np.float64((tmpy-previous_tmpy)/ticks_per_rev)*2*np.pi*wheel_radius;
@@ -164,7 +170,8 @@ def callback(data):
     previous_tmpx=tmpx
     previous_tmpy=tmpy
 
-
+    velocity_left=left_dis_gap/time_gap
+    velocity_right=right_dis_gap/time_gap
 
     deltarotz=wrapTo2Pi((right_dis_gap-left_dis_gap)/wheel_gap)
     trans=(left_dis_gap+right_dis_gap)/2
@@ -205,6 +212,16 @@ def callback(data):
     odom_message.pose.pose.orientation.w=odom_quat[3]
 
     odom_pub.publish(odom_message)
+    
+    vel_message.header.stamp = current_time
+    vel_message.header.seq = odom_cnt
+
+    vel_message.header.frame_id = 'odom'
+   
+    vel_message.twist.twist.linear.x=velocity_left
+    vel_message.twist.twist.linear.y=velocity_right
+    
+    currentvel_pub.publish(vel_message)
 
 
     

@@ -1,7 +1,9 @@
 #include <ros.h>
 #include <ros/time.h>
 #include <tf/tf.h>
+#include <geometry_msgs/Twist.h>
 #include <tf/transform_broadcaster.h>
+#include<PID_v1.h>
 
 ros::NodeHandle  nh;
 geometry_msgs::TransformStamped t;
@@ -13,8 +15,8 @@ tf::TransformBroadcaster broadcaster;
  
 // Other encoder output to Arduino to keep track of wheel direction
 // Tracks ther direction of rotation.
-#define ENC_IN_LEFT_B 20
-#define ENC_IN_RIGHT_B 21
+#define ENC_IN_LEFT_B 4
+#define ENC_IN_RIGHT_B 10
 
 //
 const double wheel_radius = 0.048;//in m
@@ -53,11 +55,42 @@ int interval = 100;
 long previousMillis = 0;
 long currentMillis = 0;
 long timegap = 0;
+
+//Controller params
+float demandx=0;
+float demandz=0;
+double demand_speed_left;
+double demand_speed_right;
+int ENB = 5;
+int IND = 11;
+int INC = 6;
+
+int ENA = 7;
+int INA = 8;
+int INB = 13;
+
+double left_kp = 3.8 , left_ki = 0 , left_kd = 0.0;             // modify for optimal performance
+double right_kp = 4 , right_ki = 0 , right_kd = 0.0;
+
+double right_input = 0, right_output = 0, right_setpoint = 0;
+PID rightPID(&right_input, &right_output, &right_setpoint, right_kp, right_ki, right_kd, DIRECT);  
+
+double left_input = 0, left_output = 0, left_setpoint = 0;
+PID leftPID(&left_input, &left_output, &left_setpoint, left_kp, left_ki, left_kd, DIRECT);  
+
+void cmd_vel_cb( const geometry_msgs::Twist& twist){
+  demandx = twist.linear.x;
+  demandz = twist.angular.z;
+  //Serial.println(demandx,4);
+}
+
+ros::Subscriber<geometry_msgs::Twist> sub("/cmd_vel", cmd_vel_cb );
  
 void setup() {
 
   nh.initNode();
   broadcaster.init(nh);
+  nh.subscribe(sub);
   // Open the serial port at 9600 bps
   Serial.begin(115200); 
  
@@ -66,6 +99,21 @@ void setup() {
   pinMode(ENC_IN_LEFT_B , INPUT);
   pinMode(ENC_IN_RIGHT_A , INPUT_PULLUP);
   pinMode(ENC_IN_RIGHT_B , INPUT);
+
+  pinMode(ENB,OUTPUT);   //left motors forward
+  pinMode(IND,OUTPUT);   //left motors reverse
+  pinMode(INC,OUTPUT);   //right motors forward
+  pinMode(ENA,OUTPUT);   //right motors reverse
+  pinMode(INA,OUTPUT);   //Led
+  pinMode(INB,OUTPUT);
+
+  rightPID.SetMode(AUTOMATIC);
+  rightPID.SetSampleTime(1);
+  rightPID.SetOutputLimits(-140, 140);
+
+  leftPID.SetMode(AUTOMATIC);
+  leftPID.SetSampleTime(1);
+  leftPID.SetOutputLimits(-140, 140);
  
   // Every time the pin goes high, this is a tick
   attachInterrupt(digitalPinToInterrupt(ENC_IN_LEFT_A), left_wheel_tick, RISING);
@@ -85,6 +133,31 @@ void loop() {
     v_l = 1000*(left_dis_gap/timegap);// (m/s)
     v_r = 1000*(right_dis_gap/timegap);
 
+    demand_speed_left = demandx - (demandz*wheel_gap/2);
+    demand_speed_right = demandx + (demandz*wheel_gap/2);
+
+    //run_PID(v_l,v_r,timegap,demand_speed_left,demand_speed_right)
+
+    left_setpoint = demand_speed_left;  
+    right_setpoint = demand_speed_right;
+
+    left_input = v_l;  
+    right_input = v_r;
+
+    leftPID.Compute();
+    rightPID.Compute();
+
+//    analogWrite(ENA,left_output*100);
+//    analogWrite(ENB,right_output*100);
+//    digitalWrite(IND,HIGH);
+//    digitalWrite(INA,HIGH);
+//    digitalWrite(INC,LOW);
+//    digitalWrite(INB,LOW);
+//    Serial.println(left_output,4);
+
+
+    
+
     calc_pub_odom(v_l,v_r,timegap);
     
     prev_right_wheel_tick_count = right_wheel_tick_count;
@@ -98,6 +171,8 @@ void loop() {
   }
 }
 
+
+ 
 void calc_pub_odom(double v_l,double v_r,double timegap){
 
   double vel_trans=(v_l+v_r)/2;
