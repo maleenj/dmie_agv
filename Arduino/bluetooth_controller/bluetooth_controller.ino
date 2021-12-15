@@ -85,7 +85,7 @@ void setup() {
 //  
   
   //Bluetooth Code Ends
-  Serial.begin(9600);
+  Serial.begin(115200);
 
  
 }
@@ -93,7 +93,7 @@ void setup() {
 void loop() {
 
     nh.spinOnce();
-    delay(1);
+    //delay(1);
 
     demand_speed_left = demandlinear - (demandangular*wheel_gap/2);
     demand_speed_right = demandlinear + (demandangular*wheel_gap/2);
@@ -120,63 +120,63 @@ void loop() {
   
     P.vector.x=current_speed_left;
     P.vector.y=current_speed_right;
-
+    tester.publish(&P);
 
 // //Bluetooth Code Begins
-if(Serial.available()){
-  t = Serial.read();
-  //Serial.println(t);
-  //Serial.println(Q);
-}
- 
-if(t == 'F'){            //move forward(all motors rotate in forward direction)
-  analogWrite(ENA,Q);
-  analogWrite(ENB,Q);
-  digitalWrite(IND,HIGH);
-  digitalWrite(INA,HIGH);
-  digitalWrite(INC,LOW);
-  digitalWrite(INB,LOW);
-  //Serial.println(t);
-}
- 
-else if(t == 'B'){      //move reverse (all motors rotate in reverse direction)
-  analogWrite(ENA,Q);
-  analogWrite(ENB,Q);
-  digitalWrite(IND,LOW);
-  digitalWrite(INA,LOW);
-  digitalWrite(INC,HIGH);
-  digitalWrite(INB,HIGH);
-  //Serial.println(t);
-}
- 
-else if(t == 'L'){      //turn left(left side motors rotate in forward direction, right side motors doesn't rotate)
-  analogWrite(ENA,Q);
-  analogWrite(ENB,Q);
-  digitalWrite(IND,HIGH);
-  digitalWrite(INA,LOW);
-  digitalWrite(INC,LOW);
-  digitalWrite(INB,HIGH);
-  //Serial.println(t);
-}
- 
-else if(t == 'R'){      //turn right  (right side motors rotate in forward direction, left side motors doesn't rotate)
-  analogWrite(ENA,Q);
-  analogWrite(ENB,Q);
-  digitalWrite(IND,LOW);
-  digitalWrite(INA,HIGH);
-  digitalWrite(INC,HIGH);
-  digitalWrite(INB,LOW);
-  //Serial.println(t);
-}
- 
-else if(t == 'S'){      //STOP (all motors stop)
-  analogWrite(ENA,Q);
-  analogWrite(ENB,Q);        
-  digitalWrite(IND,LOW);
-  digitalWrite(INA,LOW);
-  digitalWrite(INC,LOW);
-  digitalWrite(INB,LOW);
-  //Serial.println(t);
-}
-//delay(Q);
+//if(Serial.available()){
+//  t = Serial.read();
+//  //Serial.println(t);
+//  //Serial.println(Q);
+//}
+// 
+//if(t == 'F'){            //move forward(all motors rotate in forward direction)
+//  analogWrite(ENA,Q);
+//  analogWrite(ENB,Q);
+//  digitalWrite(IND,HIGH);
+//  digitalWrite(INA,HIGH);
+//  digitalWrite(INC,LOW);
+//  digitalWrite(INB,LOW);
+//  //Serial.println(t);
+//}
+// 
+//else if(t == 'B'){      //move reverse (all motors rotate in reverse direction)
+//  analogWrite(ENA,Q);
+//  analogWrite(ENB,Q);
+//  digitalWrite(IND,LOW);
+//  digitalWrite(INA,LOW);
+//  digitalWrite(INC,HIGH);
+//  digitalWrite(INB,HIGH);
+//  //Serial.println(t);
+//}
+// 
+//else if(t == 'L'){      //turn left(left side motors rotate in forward direction, right side motors doesn't rotate)
+//  analogWrite(ENA,Q);
+//  analogWrite(ENB,Q);
+//  digitalWrite(IND,HIGH);
+//  digitalWrite(INA,LOW);
+//  digitalWrite(INC,LOW);
+//  digitalWrite(INB,HIGH);
+//  //Serial.println(t);
+//}
+// 
+//else if(t == 'R'){      //turn right  (right side motors rotate in forward direction, left side motors doesn't rotate)
+//  analogWrite(ENA,Q);
+//  analogWrite(ENB,Q);
+//  digitalWrite(IND,LOW);
+//  digitalWrite(INA,HIGH);
+//  digitalWrite(INC,HIGH);
+//  digitalWrite(INB,LOW);
+//  //Serial.println(t);
+//}
+// 
+//else if(t == 'S'){      //STOP (all motors stop)
+//  analogWrite(ENA,Q);
+//  analogWrite(ENB,Q);        
+//  digitalWrite(IND,LOW);
+//  digitalWrite(INA,LOW);
+//  digitalWrite(INC,LOW);
+//  digitalWrite(INB,LOW);
+//  //Serial.println(t);
+//}
+////delay(Q);
 }
