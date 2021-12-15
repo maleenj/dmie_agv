@@ -3,10 +3,13 @@
 #include <tf/tf.h>
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/TwistWithCovarianceStamped.h>
+#include <geometry_msgs/Vector3Stamped.h>
 #include <tf/transform_broadcaster.h>
 #include<PID_v1.h>
 
 ros::NodeHandle  nh;
+geometry_msgs::Vector3Stamped P;
+ros::Publisher tester("testing_topic", &P);
 
 const double wheel_radius = 0.048;//in m
 const double wheel_gap=0.37;
@@ -32,15 +35,15 @@ PID leftPID(&left_input, &left_output, &left_setpoint, left_kp, left_ki, left_kd
 void cmd_vel_cb( const geometry_msgs::Twist& twist){
   demandlinear = twist.linear.x;
   demandangular = twist.angular.z;
-  Serial.println(demandlinear,4);
+  //Serial.println(demandlinear,4);
 }
 
 
 void current_vel_cb( const geometry_msgs::Twist& twist){
   current_speed_left = twist.linear.x;
   current_speed_right = twist.linear.y;
-  Serial.println("callback");
-  Serial.println(current_speed_left,4);
+  //Serial.println("callback");
+  //Serial.println(current_speed_left,4);
 }
 
 ros::Subscriber<geometry_msgs::Twist> sub_demand("/cmd_vel", &cmd_vel_cb );
@@ -63,6 +66,7 @@ void setup() {
   nh.initNode();
   nh.subscribe(sub_demand);
   nh.subscribe(sub_currentvel);
+  nh.advertise(tester); 
 
   rightPID.SetMode(AUTOMATIC);
   rightPID.SetSampleTime(1);
@@ -110,7 +114,12 @@ void loop() {
 //  digitalWrite(INC,LOW);
 //  digitalWrite(INB,LOW);
 
-     
+    
+    P.header.stamp = nh.now();
+    P.header.frame_id = "/test";
+  
+    P.vector.x=current_speed_left;
+    P.vector.y=current_speed_right;
 
 
 // //Bluetooth Code Begins
