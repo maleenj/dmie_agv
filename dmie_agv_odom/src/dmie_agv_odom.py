@@ -57,10 +57,13 @@ ticks_per_rev = 2100;
 
 
 def wrapTo2Pi(angles):
+
+    tmp = np.arctan2(np.sin(angles), np.cos(angles))
+    return float(np.where(tmp<0 , 2*np.pi+tmp, tmp))
   
-  wrapped=(2*np.pi + angles) * (angles < 0) + angles*(angles >= 0)
+  #wrapped=(2*np.pi + angles) * (angles < 0) + angles*(angles >= 0)
   
-  return wrapped
+  #return wrapped
 
 def handle_dat_encoder(encoder_x,encoder_x_prev, encoder_y, encoder_y_prev):
     global encoder_wraps_x, encoder_wraps_y, increasex, increasey
@@ -73,7 +76,7 @@ def handle_dat_encoder(encoder_x,encoder_x_prev, encoder_y, encoder_y_prev):
     # calculate diff
     diff = encoder_x - encoder_x_prev
 
-    print("current x : ", encoder_x, "previous x :", encoder_x_prev, "diff : ", diff)
+    #print("current x : ", encoder_x, "previous x :", encoder_x_prev, "diff : ", diff)
 
 
     # check wrap around
@@ -101,7 +104,7 @@ def handle_dat_encoder(encoder_x,encoder_x_prev, encoder_y, encoder_y_prev):
         tmpx=encoder_x
 
 
-    print("tmpX : ", tmpx)
+    #print("tmpX : ", tmpx)
 
     # process y
 
@@ -144,7 +147,7 @@ def handle_dat_encoder(encoder_x,encoder_x_prev, encoder_y, encoder_y_prev):
 def callback(data):
     global current_encoder_left, current_encoder_right, previous_encoder_left, previous_encoder_right, odom_cnt, odom_message, current_time, previous_time
     global wheel_radius, wheel_gap,ticks_per_rev, positionx, positiony, orientz,previous_tmpx,previous_tmpy
-    rospy.loginfo("Recieved %f, %f ", data.vector.x,data.vector.y)
+    #rospy.loginfo("Recieved %f, %f ", data.vector.x,data.vector.y)
     odom_broadcaster = tf.TransformBroadcaster()
 
     previous_time=current_time
@@ -173,12 +176,20 @@ def callback(data):
     velocity_left=left_dis_gap/time_gap
     velocity_right=right_dis_gap/time_gap
 
-    deltarotz=wrapTo2Pi((right_dis_gap-left_dis_gap)/wheel_gap)
+    deltarotz=((left_dis_gap-right_dis_gap)/wheel_gap)
     trans=(left_dis_gap+right_dis_gap)/2
 
 
     
     orientz=wrapTo2Pi(orientz+deltarotz)
+
+    if orientz < 0.00001:
+
+        orientz = 0
+
+
+
+    #print("orientz : ", orientz)
 
     deltax=trans*np.cos(orientz)
     deltay=trans*np.sin(orientz)
@@ -189,6 +200,8 @@ def callback(data):
     odom_cnt = odom_cnt + 1
 
     odom_quat = tf.transformations.quaternion_from_euler(0, 0, orientz)
+
+    print("orientz : ", odom_quat)
 
     odom_broadcaster.sendTransform(
         (positionx, positiony, 0.),
