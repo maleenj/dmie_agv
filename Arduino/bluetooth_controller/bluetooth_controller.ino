@@ -18,7 +18,7 @@ pinMode(INC,OUTPUT);   //right motors forward
 pinMode(ENA,OUTPUT);   //right motors reverse
 pinMode(INA,OUTPUT);   //Led
 pinMode(INB,OUTPUT);
-Serial.begin(115200);
+Serial.begin(9600);
 
 
 }
@@ -27,7 +27,7 @@ void loop() {
 if(Serial.available()){
   t = Serial.read();
   Serial.println(t);
-  Serial.println(Q);
+  //Serial.println(Q);
 }
  
 if(t == 'F'){            //move forward(all motors rotate in forward direction)

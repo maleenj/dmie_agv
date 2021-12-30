@@ -3,7 +3,7 @@
 <launch>
 
   
-  <node pkg="static_transform_mux" type="static_transform_mux" name="static_transform_mux"/>
+  <!--node pkg="static_transform_mux" type="static_transform_mux" name="static_transform_mux"/-->
 
   <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_laser_tf_publisher" args="0.2 0 0 0 0 0 base_link laser" />
 

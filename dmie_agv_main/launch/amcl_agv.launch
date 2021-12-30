@@ -5,7 +5,7 @@
   <!-- Map Server Arguments -->
   <!--arg name="map_file" default="$(env TURTLEBOT_GAZEBO_MAP_FILE)"/-->
 
-  <arg name="map_file" default="$(find dmie_agv_main)/maps/2021-12-24-canteen-4.yaml"/>
+  <arg name="map_file" default="/home/gihan/catkin_ws/src/dmie_agv/dmie_agv_main/maps/2021-12-24-canteen-4.yaml"/>
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
   <!-- Arguments -->
@@ -51,7 +51,7 @@
 
   </node>
 
-      <!--node name="rviz" pkg="rviz" type="rviz" args="-d $(find m2wr_description)/rvizconfig2.rviz" /-->
+      <node name="rviz" pkg="rviz" type="rviz" args="-d $(find dmie_agv_main)/rvizconfig2.rviz" />
 
 </launch>
 

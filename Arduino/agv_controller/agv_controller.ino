@@ -18,10 +18,10 @@ int ticks = 2100;
 //Controller params
 float demandlinear=0;
 float demandangular=0;
-double demand_speed_left;
-double demand_speed_right;
-double current_speed_left;
-double current_speed_right;
+double demand_speed_left=0;
+double demand_speed_right=0;
+double current_speed_left=0;
+double current_speed_right=0;
 
 double left_kp = 3.8 , left_ki = 0 , left_kd = 0.0;             // modify for optimal performance
 double right_kp = 4 , right_ki = 0 , right_kd = 0.0;
@@ -76,12 +76,12 @@ void setup() {
   leftPID.SetSampleTime(1);
   leftPID.SetOutputLimits(-140, 140);
     
-//  pinMode(ENB,OUTPUT);   
-//  pinMode(IND,OUTPUT);   
-//  pinMode(INC,OUTPUT);   
-//  pinMode(ENA,OUTPUT);   
-//  pinMode(INA,OUTPUT);  
-//  pinMode(INB,OUTPUT);
+  pinMode(ENB,OUTPUT);   
+  pinMode(IND,OUTPUT);   
+  pinMode(INC,OUTPUT);   
+  pinMode(ENA,OUTPUT);   
+  pinMode(INA,OUTPUT);  
+  pinMode(INB,OUTPUT);
 //  
   
   //Bluetooth Code Ends
@@ -107,12 +107,12 @@ void loop() {
     leftPID.Compute();
     rightPID.Compute();
 
-//  analogWrite(ENA,left_output*100);
-//  analogWrite(ENB,right_output*100);
-//  digitalWrite(IND,HIGH);
-//  digitalWrite(INA,HIGH);
-//  digitalWrite(INC,LOW);
-//  digitalWrite(INB,LOW);
+  analogWrite(ENA,left_output*100);
+  analogWrite(ENB,right_output*100);
+  digitalWrite(IND,HIGH);
+  digitalWrite(INA,HIGH);
+  digitalWrite(INC,LOW);
+  digitalWrite(INB,LOW);
 
     
     P.header.stamp = nh.now();

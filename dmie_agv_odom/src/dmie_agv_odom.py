@@ -231,8 +231,8 @@ def callback(data):
 
     #vel_message.header.frame_id = 'odom'
    
-    vel_message.linear.x=velocity_left
-    vel_message.linear.y=velocity_right
+    vel_message.linear.x=velocity_right
+    vel_message.linear.y=velocity_left
     
     currentvel_pub.publish(vel_message)
 
@@ -254,3 +254,4 @@ if __name__ == '__main__':
     encoder_listen()
     
     
+
