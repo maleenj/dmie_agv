@@ -11,8 +11,8 @@ ros::NodeHandle  nh;
 geometry_msgs::Vector3Stamped P;
 ros::Publisher tester("testing_topic", &P);
 
-const double wheel_radius = 0.048;//in m
-const double wheel_gap=0.37;
+const double wheel_radius = 0.065;//in m
+const double wheel_gap=0.395;
 int ticks = 2100;
 
 //Controller params
@@ -54,7 +54,7 @@ char t;
 
 int ENB = 5;
 int IND = 9;
-int Q = (140);
+int Q = (160);
 int INC = 6;
 
 int ENA = 7;

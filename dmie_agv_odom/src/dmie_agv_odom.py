@@ -51,8 +51,8 @@ vel_message=Twist()
 
 odom_cnt=0
 
-wheel_radius = 0.048; #in m
-wheel_gap=0.37;
+wheel_radius = 0.065; #in m
+wheel_gap=0.395;
 ticks_per_rev = 2100;
 
 
@@ -200,7 +200,7 @@ def callback(data):
     odom_cnt = odom_cnt + 1
 
     odom_quat = tf.transformations.quaternion_from_euler(0, 0, orientz)
-
+ls
     print("orientz : ", odom_quat)
 
     odom_broadcaster.sendTransform(
