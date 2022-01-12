@@ -200,7 +200,7 @@ def callback(data):
     odom_cnt = odom_cnt + 1
 
     odom_quat = tf.transformations.quaternion_from_euler(0, 0, orientz)
-ls
+
     print("orientz : ", odom_quat)
 
     odom_broadcaster.sendTransform(

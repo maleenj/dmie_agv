@@ -9,7 +9,7 @@
 
 ros::NodeHandle  nh;
 geometry_msgs::Vector3Stamped P;
-ros::Publisher tester("testing_topic", &P);
+//ros::Publisher tester("testing_topic", &P);
 
 const double wheel_radius = 0.065;//in m
 const double wheel_gap=0.395;
@@ -66,7 +66,7 @@ void setup() {
   nh.initNode();
   nh.subscribe(sub_demand);
   nh.subscribe(sub_currentvel);
-  nh.advertise(tester); 
+  //nh.advertise(tester); 
 
   rightPID.SetMode(AUTOMATIC);
   rightPID.SetSampleTime(1);
@@ -120,7 +120,7 @@ void loop() {
   
     P.vector.x=current_speed_left;
     P.vector.y=current_speed_right;
-    tester.publish(&P);
+    //tester.publish(&P);
 
 // //Bluetooth Code Begins
 //if(Serial.available()){
