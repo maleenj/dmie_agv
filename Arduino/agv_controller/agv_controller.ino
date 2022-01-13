@@ -9,7 +9,7 @@
 
 ros::NodeHandle  nh;
 geometry_msgs::Vector3Stamped P;
-//ros::Publisher tester("testing_topic", &P);
+ros::Publisher tester("testing_topic", &P);
 
 const double wheel_radius = 0.065;//in m
 const double wheel_gap=0.395;
@@ -23,8 +23,8 @@ double demand_speed_right=0;
 double current_speed_left=0;
 double current_speed_right=0;
 
-double left_kp = 3.8 , left_ki = 0 , left_kd = 0.0;             // modify for optimal performance
-double right_kp = 4 , right_ki = 0 , right_kd = 0.0;
+double left_kp = 2000 , left_ki = 1000 , left_kd = 0;             // modify for optimal performance
+double right_kp = 2000 , right_ki = 1000 , right_kd = 0;
 
 double right_input = 0, right_output = 0, right_setpoint = 0;
 PID rightPID(&right_input, &right_output, &right_setpoint, right_kp, right_ki, right_kd, DIRECT);  
@@ -66,15 +66,15 @@ void setup() {
   nh.initNode();
   nh.subscribe(sub_demand);
   nh.subscribe(sub_currentvel);
-  //nh.advertise(tester); 
+  nh.advertise(tester); 
 
   rightPID.SetMode(AUTOMATIC);
   rightPID.SetSampleTime(1);
-  rightPID.SetOutputLimits(-140, 140);
+  rightPID.SetOutputLimits(0, 160);
 
   leftPID.SetMode(AUTOMATIC);
   leftPID.SetSampleTime(1);
-  leftPID.SetOutputLimits(-140, 140);
+  leftPID.SetOutputLimits(0, 160);
     
   pinMode(ENB,OUTPUT);   
   pinMode(IND,OUTPUT);   
@@ -107,76 +107,31 @@ void loop() {
     leftPID.Compute();
     rightPID.Compute();
 
-  analogWrite(ENA,left_output*100);
-  analogWrite(ENB,right_output*100);
-  digitalWrite(IND,HIGH);
-  digitalWrite(INA,HIGH);
-  digitalWrite(INC,LOW);
-  digitalWrite(INB,LOW);
+    if (left_setpoint < 0){
+      digitalWrite(INC,HIGH);
+      digitalWrite(IND,LOW);}
+    else{
+      digitalWrite(INC,LOW);
+      digitalWrite(IND,HIGH);
+    }
+  
+    if (right_setpoint < 0){
+      digitalWrite(INA,LOW);
+      digitalWrite(INB,HIGH);}
+    else{
+      digitalWrite(INA,HIGH);
+      digitalWrite(INB,LOW);
+    }
+  
+    analogWrite(ENA,left_output);
+    analogWrite(ENB,right_output);
 
     
     P.header.stamp = nh.now();
     P.header.frame_id = "/test";
   
-    P.vector.x=current_speed_left;
-    P.vector.y=current_speed_right;
-    //tester.publish(&P);
+    P.vector.x=demand_speed_left;
+    P.vector.y=demand_speed_right;
+    tester.publish(&P);
 
-// //Bluetooth Code Begins
-//if(Serial.available()){
-//  t = Serial.read();
-//  //Serial.println(t);
-//  //Serial.println(Q);
-//}
-// 
-//if(t == 'F'){            //move forward(all motors rotate in forward direction)
-//  analogWrite(ENA,Q);
-//  analogWrite(ENB,Q);
-//  digitalWrite(IND,HIGH);
-//  digitalWrite(INA,HIGH);
-//  digitalWrite(INC,LOW);
-//  digitalWrite(INB,LOW);
-//  //Serial.println(t);
-//}
-// 
-//else if(t == 'B'){      //move reverse (all motors rotate in reverse direction)
-//  analogWrite(ENA,Q);
-//  analogWrite(ENB,Q);
-//  digitalWrite(IND,LOW);
-//  digitalWrite(INA,LOW);
-//  digitalWrite(INC,HIGH);
-//  digitalWrite(INB,HIGH);
-//  //Serial.println(t);
-//}
-// 
-//else if(t == 'L'){      //turn left(left side motors rotate in forward direction, right side motors doesn't rotate)
-//  analogWrite(ENA,Q);
-//  analogWrite(ENB,Q);
-//  digitalWrite(IND,HIGH);
-//  digitalWrite(INA,LOW);
-//  digitalWrite(INC,LOW);
-//  digitalWrite(INB,HIGH);
-//  //Serial.println(t);
-//}
-// 
-//else if(t == 'R'){      //turn right  (right side motors rotate in forward direction, left side motors doesn't rotate)
-//  analogWrite(ENA,Q);
-//  analogWrite(ENB,Q);
-//  digitalWrite(IND,LOW);
-//  digitalWrite(INA,HIGH);
-//  digitalWrite(INC,HIGH);
-//  digitalWrite(INB,LOW);
-//  //Serial.println(t);
-//}
-// 
-//else if(t == 'S'){      //STOP (all motors stop)
-//  analogWrite(ENA,Q);
-//  analogWrite(ENB,Q);        
-//  digitalWrite(IND,LOW);
-//  digitalWrite(INA,LOW);
-//  digitalWrite(INC,LOW);
-//  digitalWrite(INB,LOW);
-//  //Serial.println(t);
-//}
-////delay(Q);
 }

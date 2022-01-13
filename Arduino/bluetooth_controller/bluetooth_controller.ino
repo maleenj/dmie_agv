@@ -9,7 +9,8 @@ int ENA = 7;
 int INA = 8;
 int INB = 13;
 
-int Q = (140);
+int QR = (140);
+int QL = (140);
 void setup() {
   
 pinMode(ENB,OUTPUT);   //left motors forward
@@ -31,8 +32,8 @@ if(Serial.available()){
 }
  
 if(t == 'F'){            //move forward(all motors rotate in forward direction)
-  analogWrite(ENA,Q);
-  analogWrite(ENB,Q);
+  analogWrite(ENA,QR);
+  analogWrite(ENB,QL);
   digitalWrite(IND,HIGH);
   digitalWrite(INA,HIGH);
   digitalWrite(INC,LOW);
@@ -41,8 +42,8 @@ if(t == 'F'){            //move forward(all motors rotate in forward direction)
 }
  
 else if(t == 'B'){      //move reverse (all motors rotate in reverse direction)
-  analogWrite(ENA,Q);
-  analogWrite(ENB,Q);
+  analogWrite(ENA,QR);
+  analogWrite(ENB,QL);
   digitalWrite(IND,LOW);
   digitalWrite(INA,LOW);
   digitalWrite(INC,HIGH);
@@ -51,8 +52,8 @@ else if(t == 'B'){      //move reverse (all motors rotate in reverse direction)
 }
  
 else if(t == 'L'){      //turn right (left side motors rotate in forward direction, right side motors doesn't rotate)
-  analogWrite(ENA,Q);
-  analogWrite(ENB,Q);
+  analogWrite(ENA,QR);
+  analogWrite(ENB,QL);
   digitalWrite(IND,HIGH);
   digitalWrite(INA,LOW);
   digitalWrite(INC,LOW);
@@ -61,8 +62,8 @@ else if(t == 'L'){      //turn right (left side motors rotate in forward directi
 }
  
 else if(t == 'R'){      //turn left (right side motors rotate in forward direction, left side motors doesn't rotate)
-  analogWrite(ENA,Q);
-  analogWrite(ENB,Q);
+  analogWrite(ENA,QR);
+  analogWrite(ENB,QL);
   digitalWrite(IND,LOW);
   digitalWrite(INA,HIGH);
   digitalWrite(INC,HIGH);
@@ -71,13 +72,13 @@ else if(t == 'R'){      //turn left (right side motors rotate in forward directi
 }
  
 else if(t == 'S'){      //STOP (all motors stop)
-  analogWrite(ENA,Q);
-  analogWrite(ENB,Q);        
+  analogWrite(ENA,QR);
+  analogWrite(ENB,QL);        
   digitalWrite(IND,LOW);
   digitalWrite(INA,LOW);
   digitalWrite(INC,LOW);
   digitalWrite(INB,LOW);
   Serial.println(t);
 }
-delay(Q);
+//delay(Q);
 }
