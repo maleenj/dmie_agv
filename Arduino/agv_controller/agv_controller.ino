@@ -128,8 +128,8 @@ void loop() {
     else{
       analogWrite(ENA,0);}
 
-     if (abs(left_setpoint-left_input)> 0.05){
-      analogWrite(ENB,left_output);}
+     if (abs(right_setpoint-right_input)> 0.05){
+      analogWrite(ENB,right_output);}
     else{
       analogWrite(ENB,0);}
 
