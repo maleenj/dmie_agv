@@ -5,7 +5,7 @@
   <!-- Map Server Arguments -->
   <!--arg name="map_file" default="$(env TURTLEBOT_GAZEBO_MAP_FILE)"/-->
 
-  <arg name="map_file" default="/home/gihan/catkin_ws/src/dmie_agv/dmie_agv_main/maps/2022-01-13-canteen-1.yaml"/>
+  <arg name="map_file" default="/home/maleen/catkin_ws/src/dmie_agv_main/maps/2022-01-13-canteen-1.yaml"/>
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
   <!-- Arguments -->

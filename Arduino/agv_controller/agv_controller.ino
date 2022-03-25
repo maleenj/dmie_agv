@@ -9,7 +9,7 @@
 
 ros::NodeHandle  nh;
 geometry_msgs::Vector3Stamped P;
-ros::Publisher tester("testing_topic", &P);
+//ros::Publisher tester("testing_topic", &P);
 
 const double wheel_radius = 0.065;//in m
 const double wheel_gap=0.395;
@@ -23,8 +23,8 @@ double demand_speed_right=0;
 double current_speed_left=0;
 double current_speed_right=0;
 
-double left_kp = 2000 , left_ki = 1000 , left_kd = 0;             // modify for optimal performance
-double right_kp = 2000 , right_ki = 1000 , right_kd = 0;
+double left_kp = 3000 , left_ki = 0 , left_kd =0;             // modify for optimal performance
+double right_kp = 3000 , right_ki = 0 , right_kd = 0;
 
 double right_input = 0, right_output = 0, right_setpoint = 0;
 PID rightPID(&right_input, &right_output, &right_setpoint, right_kp, right_ki, right_kd, DIRECT);  
@@ -66,7 +66,7 @@ void setup() {
   nh.initNode();
   nh.subscribe(sub_demand);
   nh.subscribe(sub_currentvel);
-  nh.advertise(tester); 
+  //nh.advertise(tester); 
 
   rightPID.SetMode(AUTOMATIC);
   rightPID.SetSampleTime(1);
@@ -122,16 +122,25 @@ void loop() {
       digitalWrite(INA,HIGH);
       digitalWrite(INB,LOW);
     }
-  
-    analogWrite(ENA,left_output);
-    analogWrite(ENB,right_output);
+
+    if (abs(left_setpoint-left_input)> 0.05){
+      analogWrite(ENA,left_output);}
+    else{
+      analogWrite(ENA,0);}
+
+     if (abs(left_setpoint-left_input)> 0.05){
+      analogWrite(ENB,left_output);}
+    else{
+      analogWrite(ENB,0);}
+
+   
 
     
-    P.header.stamp = nh.now();
-    P.header.frame_id = "/test";
-  
-    P.vector.x=demand_speed_left;
-    P.vector.y=demand_speed_right;
-    tester.publish(&P);
+//    P.header.stamp = nh.now();
+//    P.header.frame_id = "/test";
+//  
+//    P.vector.x=demand_speed_left;
+//    P.vector.y=demand_speed_right;
+//    tester.publish(&P);
 
 }
