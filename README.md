@@ -1,6 +1,8 @@
 # DMIE AGV
 
-## INSTALL PREREQUISITES
+See [DMIE_AGV Wiki](https://github.com/maleenj/dmie_agv/wiki) for more details
+
+## INSTALLION PREREQUISITES
 
 Ubuntu 20.04
 
@@ -50,23 +52,4 @@ cd ~/catkin_ws/src/
 git clone https://github.com/maleenj/dmie_agv.git
 cd ..
 catkin_make
-```
-
-## RUN SIMULATION
-
-1. Start ROS Master
-```
-roscore
-```
-2. Launch Warehouse Environment
-```
-roslaunch dmie_agv_main warehouse.launch
-```
-3. Spawn DMIE_AGV Robot Model
-```
-roslaunch dmie_agv_main spawn_agv.launch
-```
-4. Launch Teleop
-```
-rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ```
